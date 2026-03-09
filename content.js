@@ -3,9 +3,10 @@
 (function () {
   const STORAGE_KEY = "wyscoutSpoilerBlockerEnabled";
 
-  // Score pattern: "1 - 0", "2-1", "0 : 3", "3 – 1", etc.
-  // Matches 1-2 digit numbers separated by common score delimiters
-  const SCORE_REGEX = /(\d{1,2})\s*[-–—:]\s*(\d{1,2})/;
+  // Score pattern: "1 - 0", "2-1", "3 – 1", etc.
+  // Matches 1-2 digit numbers separated by dash/en-dash/em-dash
+  // Excludes colon to avoid matching times like "00:00" or "12:30"
+  const SCORE_REGEX = /(\d{1,2})\s*[-–—]\s*(\d{1,2})/;
 
   function applyState(enabled) {
     if (enabled) {
