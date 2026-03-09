@@ -32,52 +32,11 @@
     }
   });
 
-  // Wrap score text patterns in masking spans
+  // Wrap score text patterns in masking spans — scans ALL text nodes
+  // in the subtree so scores are caught regardless of element/class structure
   function maskScoresInText(root) {
-    // Broad scan: any item-element with text type, plus common title/subtitle
-    // elements — if they contain a score pattern, mask it
-    const selectors = [
-      // JTML-rendered list/table fields (covers .title, .subtitle, etc.)
-      ".item-element.item-text",
-      // Linear list model fields
-      ".item-title",
-      ".item-subtitle",
-      ".item-detail",
-      // TSR report headers
-      ".tsr-step2-matchTable .data",
-      ".tsr-report .title h1",
-      ".tsr-report .title h2",
-      ".tsr-report .title h3",
-      ".tsr-report .title-container h1",
-      ".tsr-report .title-container h2",
-      ".tsr-report .title-container h3",
-      // Dialog content
-      ".gears-dialog h1",
-      ".gears-dialog h2",
-      ".gears-dialog .docked-title",
-      // Match detail headers
-      ".gears-dataview .data",
-    ];
-
-    const candidates = root.querySelectorAll(selectors.join(","));
-    candidates.forEach((el) => {
-      if (el.dataset.wssbProcessed) return;
-      // Only process if text actually contains a score pattern
-      if (SCORE_REGEX.test(el.textContent)) {
-        el.dataset.wssbProcessed = "true";
-        processTextNodes(el);
-      }
-    });
-
-    // If root itself matches, process it too
-    if (
-      root.matches?.(".item-element.item-text, .item-title, .item-subtitle, .item-detail") &&
-      !root.dataset.wssbProcessed &&
-      SCORE_REGEX.test(root.textContent)
-    ) {
-      root.dataset.wssbProcessed = "true";
-      processTextNodes(root);
-    }
+    if (!root || root.nodeType !== Node.ELEMENT_NODE) return;
+    processTextNodes(root);
   }
 
   // Walk text nodes and wrap score patterns in masking spans
