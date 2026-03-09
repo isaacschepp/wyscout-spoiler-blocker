@@ -31,80 +31,52 @@
     }
   });
 
-  // Check if an element is inside a match-related context
-  function isMatchContext(el) {
-    return el.closest(
-      [
-        ".matchF",
-        ".match",
-        ".matchtable",
-        ".matchtable-default",
-        ".matchtable-header",
-        ".tsr-step2-matchTable",
-        ".gears-dataview.matchtable",
-        '[class*="match"]',
-      ].join(",")
-    );
-  }
-
-  // Wrap score text patterns in masking spans within match-related elements
+  // Wrap score text patterns in masking spans
   function maskScoresInText(root) {
-    // Elements that commonly contain embedded score text (e.g. "Team A 2 - 1 Team B")
+    // Broad scan: any item-element with text type, plus common title/subtitle
+    // elements — if they contain a score pattern, mask it
     const selectors = [
-      // Match list items (linear + aengine models)
-      ".matchF .item-title",
-      ".matchF .item-subtitle",
-      ".matchF .item-detail",
-      ".matchF .item-content",
-      // TSR report wizard - match header
+      // JTML-rendered list/table fields (covers .title, .subtitle, etc.)
+      ".item-element.item-text",
+      // Linear list model fields
+      ".item-title",
+      ".item-subtitle",
+      ".item-detail",
+      // TSR report headers
       ".tsr-step2-matchTable .data",
-      // TSR report preview/print headers
       ".tsr-report .title h1",
       ".tsr-report .title h2",
       ".tsr-report .title h3",
       ".tsr-report .title-container h1",
       ".tsr-report .title-container h2",
       ".tsr-report .title-container h3",
-      // TSR wizard step 1 - match title
-      ".tsr-front .title h1",
-      ".tsr-front .title h2",
-      // Generic dialog match info
-      ".gears-dialog .matchtable-header",
-      ".gears-dialog .item-title",
-      ".gears-dialog .item-subtitle",
-      // Download dialog content
-      ".gears-dialog .item-content",
+      // Dialog content
+      ".gears-dialog h1",
+      ".gears-dialog h2",
+      ".gears-dialog .docked-title",
       // Match detail headers
-      ".gears-dataview.matchtable .data",
-      ".gears-dataview.detail .data",
+      ".gears-dataview .data",
     ];
 
     const candidates = root.querySelectorAll(selectors.join(","));
     candidates.forEach((el) => {
       if (el.dataset.wssbProcessed) return;
-      el.dataset.wssbProcessed = "true";
-      processTextNodes(el);
+      // Only process if text actually contains a score pattern
+      if (SCORE_REGEX.test(el.textContent)) {
+        el.dataset.wssbProcessed = "true";
+        processTextNodes(el);
+      }
     });
 
-    // Also scan any element with a match-related class for score patterns
-    const matchElements = root.querySelectorAll(
-      '.matchF, [class*="match"], .gears-dialog'
-    );
-    matchElements.forEach((el) => {
-      if (el.dataset.wssbScanned) return;
-      el.dataset.wssbScanned = "true";
-
-      // Find child text elements that might contain scores
-      el.querySelectorAll(
-        ".item-title, .item-subtitle, .item-detail, h1, h2, h3, .docked-title span"
-      ).forEach((child) => {
-        if (child.dataset.wssbProcessed) return;
-        if (SCORE_REGEX.test(child.textContent)) {
-          child.dataset.wssbProcessed = "true";
-          processTextNodes(child);
-        }
-      });
-    });
+    // If root itself matches, process it too
+    if (
+      root.matches?.(".item-element.item-text, .item-title, .item-subtitle, .item-detail") &&
+      !root.dataset.wssbProcessed &&
+      SCORE_REGEX.test(root.textContent)
+    ) {
+      root.dataset.wssbProcessed = "true";
+      processTextNodes(root);
+    }
   }
 
   // Walk text nodes and wrap score patterns in masking spans
@@ -163,7 +135,7 @@
         ".matchtable-default",
         '[class*="matchtable"]',
         ".matchF",
-        ".gears-list-item.matchF",
+        ".gears-list-item",
         ".tsr-step2-matchTable",
       ].join(",")
     );
