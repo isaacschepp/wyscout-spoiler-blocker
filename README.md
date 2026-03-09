@@ -11,10 +11,10 @@ A Chrome extension that hides match scores on [WyScout](https://wyscout.hudl.com
 
 ## Install
 
-1. Clone this repo (or download as ZIP)
+1. Download the latest `wyscout-spoiler-blocker.zip` from [Releases](https://github.com/isaacschepp/wyscout-spoiler-blocker/releases) and unzip it
 2. Open Chrome and go to `chrome://extensions`
 3. Enable **Developer mode** (toggle in the top right)
-4. Click **Load unpacked** and select this folder
+4. Click **Load unpacked** and select the unzipped folder
 5. Navigate to [wyscout.hudl.com](https://wyscout.hudl.com) — scores will be hidden automatically
 
 ## Usage
