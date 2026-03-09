@@ -1,16 +1,25 @@
 {
   "manifest_version": 3,
   "name": "WyScout Spoiler Blocker",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "Hides match scores on WyScout to prevent spoilers",
   "permissions": ["storage"],
-  "host_permissions": ["https://wyscout.hudl.com/*"],
+  "host_permissions": [
+    "https://wyscout.hudl.com/*",
+    "https://wyscout-apps.hudl.com/*",
+    "https://*.wyscout.com/*"
+  ],
   "content_scripts": [
     {
-      "matches": ["https://wyscout.hudl.com/*"],
+      "matches": [
+        "https://wyscout.hudl.com/*",
+        "https://wyscout-apps.hudl.com/*",
+        "https://*.wyscout.com/*"
+      ],
       "css": ["content.css"],
       "js": ["content.js"],
-      "run_at": "document_start"
+      "run_at": "document_start",
+      "all_frames": true
     }
   ],
   "action": {

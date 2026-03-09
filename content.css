@@ -45,6 +45,8 @@
   border-radius: 3px;
   padding: 0 0.3em;
   user-select: none;
+  text-shadow: none !important;
+  -webkit-text-stroke: 0 !important;
   transition: color 0.2s ease, background 0.2s ease;
 }
 
