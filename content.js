@@ -127,6 +127,12 @@
     }
   });
 
+  // Periodic rescan catches scores injected via textContent/innerHTML
+  // updates on existing elements that the childList observer misses
+  setInterval(() => {
+    processDOM(document.body);
+  }, 1500);
+
   if (document.body) {
     processDOM(document.body);
     observer.observe(document.body, { childList: true, subtree: true });
