@@ -1,0 +1,44 @@
+/* WyScout Spoiler Blocker - Score Hiding Styles */
+
+/* Hide scores in match tables */
+.scoreA,
+.scoreB {
+  color: transparent !important;
+  background: #888 !important;
+  border-radius: 3px;
+  min-width: 1.2em;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+/* Hide the score delimiter (hyphen between scores) */
+.delimiter {
+  color: transparent !important;
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.2s ease;
+}
+
+/* Reveal on hover for intentional viewing */
+.wyscout-spoiler-blocker--reveal .scoreA,
+.wyscout-spoiler-blocker--reveal .scoreB {
+  color: inherit !important;
+  background: transparent !important;
+}
+
+.wyscout-spoiler-blocker--reveal .delimiter {
+  color: inherit !important;
+}
+
+/* When extension is disabled, show everything normally */
+.wyscout-spoiler-blocker--disabled .scoreA,
+.wyscout-spoiler-blocker--disabled .scoreB {
+  color: inherit !important;
+  background: transparent !important;
+}
+
+.wyscout-spoiler-blocker--disabled .delimiter {
+  color: inherit !important;
+}
