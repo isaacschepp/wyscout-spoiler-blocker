@@ -6,7 +6,9 @@
   // Score pattern: "1 - 0", "2-1", "3 – 1", etc.
   // Matches 1-2 digit numbers separated by dash/en-dash/em-dash
   // Excludes colon to avoid matching times like "00:00" or "12:30"
-  const SCORE_REGEX = /(\d{1,2})\s*[-–—]\s*(\d{1,2})/;
+  // Lookahead/lookbehind exclude formation patterns like "4-3-3"
+  const SCORE_REGEX =
+    /(?<!\d\s*[-–—]\s*)(\d{1,2})\s*[-–—]\s*(\d{1,2})(?!\s*[-–—]\s*\d)/;
 
   function applyState(enabled) {
     if (enabled) {
@@ -87,6 +89,28 @@
     }
   }
 
+  // Hide soccer ball goal icons and adjacent timestamps in Impect SVGs
+  function hideImpectGoalIcons(root) {
+    const images = root.querySelectorAll(
+      'image[href^="data:image/svg+xml"], image[xlink\\:href^="data:image/svg+xml"]'
+    );
+
+    images.forEach((img) => {
+      if (img.classList.contains("wyscout-goal-icon")) return;
+      const width = parseFloat(img.getAttribute("width"));
+      const height = parseFloat(img.getAttribute("height"));
+      // Goal icons are small (~4-6 units); skip larger images (logos, etc.)
+      if (width && height && width < 10 && height < 10) {
+        img.classList.add("wyscout-goal-icon");
+        // Hide adjacent timestamp text element
+        let sibling = img.nextElementSibling;
+        if (sibling && sibling.tagName === "text") {
+          sibling.classList.add("wyscout-goal-timestamp");
+        }
+      }
+    });
+  }
+
   // Add double-click-to-reveal on match rows and containers
   function addRevealListeners(root) {
     const rows = root.querySelectorAll(
@@ -97,6 +121,7 @@
         ".matchF",
         ".gears-list-item",
         ".tsr-step2-matchTable",
+        '[class*="teamsheet-header"]',
       ].join(",")
     );
 
@@ -114,6 +139,7 @@
   function processDOM(root) {
     addRevealListeners(root);
     maskScoresInText(root);
+    hideImpectGoalIcons(root);
   }
 
   // Observe DOM for dynamically loaded content (WyScout is a SPA)

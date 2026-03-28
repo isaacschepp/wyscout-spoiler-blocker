@@ -38,6 +38,26 @@
   transition: color 0.2s ease, background 0.2s ease;
 }
 
+/* === Impect team sheet score header === */
+.teamsheet-header-teams-score {
+  color: transparent !important;
+  background: #888 !important;
+  border-radius: 3px;
+  user-select: none;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+.teamsheet-header-teams-score span {
+  color: transparent !important;
+}
+
+/* === SVG goal icons and timestamps (class added by JS) === */
+.wyscout-goal-icon,
+.wyscout-goal-timestamp {
+  opacity: 0 !important;
+  transition: opacity 0.2s ease;
+}
+
 /* === JS-injected score mask for embedded score text === */
 .wyscout-score-text {
   color: transparent !important;
@@ -67,6 +87,17 @@
   background: transparent !important;
 }
 
+.wyscout-spoiler-blocker--reveal .teamsheet-header-teams-score,
+.wyscout-spoiler-blocker--reveal .teamsheet-header-teams-score span {
+  color: inherit !important;
+  background: transparent !important;
+}
+
+.wyscout-spoiler-blocker--reveal .wyscout-goal-icon,
+.wyscout-spoiler-blocker--reveal .wyscout-goal-timestamp {
+  opacity: 1 !important;
+}
+
 /* === Disabled state (extension toggled off) === */
 .wyscout-spoiler-blocker--disabled .scoreA,
 .wyscout-spoiler-blocker--disabled .scoreB,
@@ -82,4 +113,15 @@
 .wyscout-spoiler-blocker--disabled .wyscout-score-text {
   color: inherit !important;
   background: transparent !important;
+}
+
+.wyscout-spoiler-blocker--disabled .teamsheet-header-teams-score,
+.wyscout-spoiler-blocker--disabled .teamsheet-header-teams-score span {
+  color: inherit !important;
+  background: transparent !important;
+}
+
+.wyscout-spoiler-blocker--disabled .wyscout-goal-icon,
+.wyscout-spoiler-blocker--disabled .wyscout-goal-timestamp {
+  opacity: 1 !important;
 }
